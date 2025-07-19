@@ -1,0 +1,997 @@
+npm init -y
+npm install express cors body-parser multer<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Vovochka Closet — Детский магазин одежды</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Магазин детской одежды Vovochka Closet — новинки, акции, быстрая доставка, отзывы, подарки и бонусы!">
+    <meta name="keywords" content="детская одежда, магазин, купить, скидки, акции, Vovochka Closet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="img/banner.webp" as="image">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://ваш-домен.ru/">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <!-- Микроразметка для отзывов -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Review",
+      "itemReviewed": {
+        "@type": "Product",
+        "name": "Платье для девочки"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Мария"
+      },
+      "datePublished": "2025-07-12",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.8",
+        "bestRating": "5"
+      },
+      "description": "Платье отличное, качество супер! Дочка в восторге."
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Vovochka Closet</h1>
+        <nav id="main-nav">
+            <a href="#">Главная</a>
+            <a href="#">Каталог</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="cart-info">
+            <span>Корзина: <span id="cart-count">0</span> товаров — <span id="cart-total">0₽</span></span>
+            <button id="cart-clear">Очистить</button>
+        </div>
+    </header>
+    <main>
+        <!-- Баннер -->
+        <!-- Детализированный баннер -->
+<section class="main-banner">
+    <img src="img/banner.jpg" alt="Баннер: дети в яркой одежде" class="banner-img">
+    <div class="banner-content">
+        <h2>Летние коллекции 2025!</h2>
+        <ul>
+            <li>Новинки для мальчиков и девочек</li>
+            <li>Скидки до 40% на популярные бренды</li>
+            <li>Быстрая доставка по всей России</li>
+            <li>Подарки при покупке от 2000₽</li>
+        </ul>
+        <a href="#catalog" class="banner-btn">Смотреть коллекцию</a>
+    </div>
+</section>
+        <!-- Акции -->
+        <section class="promo">
+            <h2>Акции и предложения</h2>
+            <div class="promo-list" id="promo-list">
+                <!-- Сюда будут добавляться новые акции -->
+            </div>
+        </section>
+        <!-- Категории -->
+        <!-- Категории с описанием -->
+<section class="categories">
+    <h2>Категории товаров</h2>
+    <div class="category-list">
+        <a href="#boys" class="category-card boys">
+            <img src="img/boys.jpg" alt="Одежда для мальчиков">
+            <span>Мальчики</span>
+            <p>Стильные футболки, шорты, куртки и аксессуары для активных мальчишек.</p>
+        </a>
+        <a href="#girls" class="category-card girls">
+            <img src="img/girls.jpg" alt="Одежда для девочек">
+            <span>Девочки</span>
+            <p>Платья, юбки, топы и модные комплекты для юных модниц.</p>
+        </a>
+        <a href="#babies" class="category-card babies">
+            <img src="img/babies.jpg" alt="Одежда для малышей">
+            <span>Малыши</span>
+            <p>Мягкие бодики, комбинезоны и уютные комплекты для малышей.</p>
+        </a>
+        <a href="#newborns" class="category-card newborns">
+            <img src="img/newborns.jpg" alt="Одежда для новорожденных">
+            <span>Новорожденные</span>
+            <p>Безопасные материалы, гипоаллергенные ткани и забота о коже малыша.</p>
+        </a>
+    </div>
+</section>
+        <!-- Сезонные коллекции -->
+        <section class="season">
+            <h2>Сезонные коллекции</h2>
+            <div class="season-list">
+                <div class="season-card">
+                    <img src="img/summer.jpg" alt="Лето">
+                    <h3>Лето 2025</h3>
+                </div>
+                <div class="season-card">
+                    <img src="img/spring.jpg" alt="Весна">
+                    <h3>Весна 2025</h3>
+                </div>
+                <div class="season-card">
+                    <img src="img/winter.jpg" alt="Зима">
+                    <h3>Зима 2025</h3>
+                </div>
+            </div>
+        </section>
+        <!-- Хиты продаж -->
+        <!-- Детализированные карточки товаров -->
+<section class="products" id="catalog">
+    <h2>Каталог товаров</h2>
+    <div class="filters">
+        <select id="filter-size">
+            <option value="">Размер</option>
+            <option value="92">92</option>
+            <option value="104">104</option>
+            <!-- ... -->
+        </select>
+        <select id="filter-color">
+            <option value="">Цвет</option>
+            <option value="розовый">Розовый</option>
+            <option value="голубой">Голубой</option>
+            <!-- ... -->
+        </select>
+        <select id="sort-price">
+            <option value="asc">Цена по возрастанию</option>
+            <option value="desc">Цена по убыванию</option>
+        </select>
+    </div>
+    <div class="product-list">
+        <!-- Сюда будут добавляться новые товары -->
+    </div>
+</section>
+        <!-- Корзина и оформление заказа -->
+        <!-- Детализированная корзина -->
+<section class="cart-section" id="cart-section">
+    <h2>Ваша корзина</h2>
+    <div id="cart-items"></div>
+    <div id="cart-summary"></div>
+    <div class="cart-actions">
+        <button id="checkout-btn">Оформить заказ</button>
+        <button id="cart-clear">Очистить корзину</button>
+    </div>
+    <p class="cart-info-text">* После оформления заказа вы получите подтверждение на email и сможете отслеживать статус заказа в личном кабинете.</p>
+</section>
+        <section class="checkout-section" id="checkout-section" style="display:none;">
+            <h2>Оформление заказа</h2>
+            <form id="order-form">
+                <label>Имя:<input type="text" name="name" required></label>
+                <label>Телефон:<input type="tel" name="phone" required></label>
+                <label>Email:<input type="email" name="email" required></label>
+                <label>Адрес доставки:<input type="text" name="address" required></label>
+                <label>Комментарий к заказу:<textarea name="comment"></textarea></label>
+                <label>Способ доставки:
+                    <select name="delivery" required>
+                        <option value="courier">Курьер</option>
+                        <option value="pickup">Самовывоз</option>
+                        <option value="post">Почта</option>
+                    </select>
+                </label>
+                <label>Способ оплаты:
+                    <select name="payment" required>
+                        <option value="card">Банковская карта</option>
+                        <option value="cash">Наличные</option>
+                        <option value="online">Онлайн-оплата</option>
+                    </select>
+                </label>
+                <button type="submit">Подтвердить заказ</button>
+                <button type="button" id="back-to-cart">Назад к корзине</button>
+            </form>
+            <div class="order-info">
+                <p>Ваши данные защищены SSL-сертификатом. Мы не передаём информацию третьим лицам.</p>
+                <p>Возврат и обмен — в течение 14 дней, подробности <a href="#return-policy">здесь</a>.</p>
+            </div>
+        </section>
+        <!-- Безопасность и доверие -->
+        <!-- Детализированный блок "Безопасность и доверие" -->
+<section class="trust">
+    <h2>Безопасность и доверие</h2>
+    <div class="trust-list">
+        <div class="trust-card">
+            <img src="img/ssl.png" alt="SSL">
+            <p>Все данные защищены SSL-сертификатом. Ваши покупки безопасны!</p>
+        </div>
+        <div class="trust-card">
+            <img src="img/return.png" alt="Возврат">
+            <p>Условия возврата и обмена: возврат в течение 14 дней, обмен без проблем. <a href="#return-policy">Подробнее</a></p>
+        </div>
+        <div class="trust-card">
+            <img src="img/loyalty.png" alt="Лояльность">
+            <p>Скидка 10% за регистрацию, бонусы и подарки при покупке! <a href="#loyalty">Узнать больше</a></p>
+        </div>
+    </div>
+</section>
+        <!-- Отзывы о товарах -->
+        <!-- Детализированные отзывы -->
+<section class="reviews">
+    <h2>Отзывы о товарах</h2>
+    <div class="reviews-list" id="reviews-list">
+        <div class="review-card">
+            <strong>Мария</strong>
+            <span class="stars">★★★★★</span>
+            <p>Платье отличное, качество супер! Дочка в восторге.</p>
+            <span class="review-date">12.07.2025</span>
+        </div>
+        <div class="review-card">
+            <strong>Иван</strong>
+            <span class="stars">★★★★☆</span>
+            <p>Куртка понравилась, доставка быстрая. Размер подошёл идеально.</p>
+            <span class="review-date">10.07.2025</span>
+        </div>
+        <!-- Новые отзывы будут добавляться сюда -->
+    </div>
+    <form id="review-form">
+        <label>Ваше имя:<input type="text" name="name" required></label>
+        <label>Оценка:
+            <select name="rating" required>
+                <option value="5">5 ★★★★★</option>
+                <option value="4">4 ★★★★☆</option>
+                <option value="3">3 ★★★☆☆</option>
+                <option value="2">2 ★★☆☆☆</option>
+                <option value="1">1 ★☆☆☆☆</option>
+            </select>
+        </label>
+        <label>Отзыв:<textarea name="text" required></textarea></label>
+        <label>Фото:<input type="file" name="photo" accept="image/*"></label>
+        <button type="submit">Оставить отзыв</button>
+    </form>
+</section>
+        <!-- Отзывы о магазине -->
+        <section class="shop-reviews">
+            <h2>Отзывы о магазине</h2>
+            <div class="reviews-list" id="shop-reviews-list">
+                <div class="review-card">
+                    <strong>Ольга</strong>
+                    <span class="stars">★★★★★</span>
+                    <p>Очень приятный сервис, рекомендую!</p>
+                </div>
+                <!-- Новые отзывы будут добавляться сюда -->
+            </div>
+            <form id="shop-review-form">
+                <label>Ваше имя:<input type="text" name="name" required></label>
+                <label>Оценка:
+                    <select name="rating" required>
+                        <option value="5">5 ★★★★★</option>
+                        <option value="4">4 ★★★★☆</option>
+                        <option value="3">3 ★★★☆☆</option>
+                        <option value="2">2 ★★☆☆☆</option>
+                        <option value="1">1 ★☆☆☆☆</option>
+                    </select>
+                </label>
+                <label>Отзыв:<textarea name="text" required></textarea></label>
+                <button type="submit">Оставить отзыв</button>
+            </form>
+        </section>
+        <!-- Калькулятор комплекта -->
+        <section class="set-calculator">
+            <h2>Собери свой лук и получи скидку!</h2>
+            <form id="set-form">
+                <label>Футболка:
+                    <select name="tshirt">
+                        <option value="0">Не выбрано</option>
+                        <option value="800">Футболка — 800₽</option>
+                    </select>
+                </label>
+                <label>Шорты:
+                    <select name="shorts">
+                        <option value="0">Не выбрано</option>
+                        <option value="700">Шорты — 700₽</option>
+                    </select>
+                </label>
+                <label>Кепка:
+                    <select name="cap">
+                        <option value="0">Не выбрано</option>
+                        <option value="400">Кепка — 400₽</option>
+                    </select>
+                </label>
+                <button type="button" id="calc-set">Рассчитать комплект</button>
+            </form>
+            <div id="set-result"></div>
+        </section>
+
+        <!-- Купить в 1 клик -->
+        <section class="buy-one-click">
+            <h2>Купить в 1 клик</h2>
+            <form id="one-click-form">
+                <label>Имя:<input type="text" name="name" required></label>
+                <label>Телефон:<input type="tel" name="phone" required></label>
+                <button type="submit">Отправить заявку</button>
+            </form>
+        </section>
+
+        <!-- Подписка на рассылку -->
+        <section class="subscribe">
+            <h2>Подписка на новинки и акции</h2>
+            <form id="subscribe-form">
+                <label>Email:<input type="email" name="email" required></label>
+                <button type="submit">Подписаться и получить 10% скидку</button>
+            </form>
+        </section>
+
+        <!-- Колесо фортуны -->
+        <section class="fortune">
+            <h2>Колесо фортуны — выиграй скидку!</h2>
+            <button id="spin-fortune">Крутить колесо</button>
+            <div id="fortune-result"></div>
+        </section>
+
+        <!-- Накопительная система -->
+        <section class="loyalty">
+            <h2>Ваши баллы: <span id="loyalty-points">0</span></h2>
+            <button id="exchange-points">Обменять баллы на подарок</button>
+            <div id="loyalty-result"></div>
+        </section>
+
+        <!-- Онлайн-консультант -->
+        <section class="consultant">
+            <h2>Онлайн-консультант</h2>
+            <p>Задайте вопрос по размеру или подбору одежды:</p>
+            <a href="https://t.me/vovochka_closet" target="_blank">Telegram</a>
+            <a href="https://wa.me/79991234567" target="_blank">WhatsApp</a>
+        </section>
+
+        <!-- Подарочные сертификаты -->
+        <section class="gift-cert">
+            <h2>Подарочные сертификаты</h2>
+            <p>Подарите радость выбора! Сертификаты на 1000₽, 3000₽, 5000₽ — идеальный подарок для семьи и друзей.</p>
+            <form id="gift-form">
+                <label>Сумма сертификата:
+                    <select name="amount" required>
+                        <option value="1000">1000₽</option>
+                        <option value="3000">3000₽</option>
+                        <option value="5000">5000₽</option>
+                    </select>
+                </label>
+                <label>Email получателя:<input type="email" name="email" required></label>
+                <button type="submit">Купить сертификат</button>
+            </form>
+        </section>
+
+        <!-- Уведомление о поступлении размера -->
+        <section class="notify-size">
+            <h2>Уведомить о поступлении размера</h2>
+            <form id="notify-form">
+                <label>Товар:<input type="text" name="product" required></label>
+                <label>Размер:<input type="text" name="size" required></label>
+                <label>Email:<input type="email" name="email" required></label>
+                <button type="submit">Уведомить меня</button>
+            </form>
+        </section>
+        <!-- В нужном месте страницы -->
+        <section class="sale-timer">
+            <h2>До конца акции осталось:</h2>
+            <div id="timer"></div>
+        </section>
+
+        <!-- Мультяшный помощник Вовочка -->
+        <section class="vovochka-helper">
+            <h2>Вовочка — ваш помощник!</h2>
+            <div class="vovochka-container">
+                <div class="vovochka-doll" id="vovochka-doll">
+                    <img src="img/vovochka_base.png" alt="Вовочка" id="vovochka-base">
+                    <img src="img/vovochka_tshirt.png" alt="Футболка" id="vovochka-tshirt" style="display:none;">
+                    <img src="img/vovochka_shorts.png" alt="Шорты" id="vovochka-shorts" style="display:none;">
+                    <img src="img/vovochka_hat.png" alt="Кепка" id="vovochka-hat" style="display:none;">
+                </div>
+                <div class="vovochka-chat" id="vovochka-chat">
+                    <p id="vovochka-message">Привет! Я Вовочка, помогу собрать крутой образ!</p>
+                </div>
+            </div>
+            <div class="vovochka-dressup">
+                <h3>Одень Вовочку:</h3>
+                <button onclick="dressVovochka('tshirt')">Футболка</button>
+                <button onclick="dressVovochka('shorts')">Шорты</button>
+                <button onclick="dressVovochka('hat')">Кепка</button>
+                <button onclick="undressVovochka()">Снять всё</button>
+            </div>
+        </section>
+
+        <script>
+        // Вовочка — интерактивное одевание
+        function dressVovochka(item) {
+            document.getElementById('vovochka-tshirt').style.display = item === 'tshirt' ? 'block' : 'none';
+            document.getElementById('vovochka-shorts').style.display = item === 'shorts' ? 'block' : 'none';
+            document.getElementById('vovochka-hat').style.display = item === 'hat' ? 'block' : 'none';
+            let msg = 'Вовочка теперь в ';
+            if(item === 'tshirt') msg += 'футболке!';
+            else if(item === 'shorts') msg += 'шортах!';
+            else if(item === 'hat') msg += 'кепке!';
+            document.getElementById('vovochka-message').textContent = msg;
+        }
+        function undressVovochka() {
+            document.getElementById('vovochka-tshirt').style.display = 'none';
+            document.getElementById('vovochka-shorts').style.display = 'none';
+            document.getElementById('vovochka-hat').style.display = 'none';
+            document.getElementById('vovochka-message').textContent = 'Вовочка ждёт новый образ!';
+        }
+        </script>
+    </main>
+    <!-- Контакты и поддержка -->
+    <!-- Детализированный футер -->
+<footer>
+    <div class="contacts">
+        <h3>Контакты и поддержка</h3>
+        <p>Телефон: <a href="tel:+79991234567">+7 (999) 123-45-67</a></p>
+        <p>Email: <a href="mailto:support@vovochka-closet.ru">support@vovochka-closet.ru</a></p>
+        <form id="feedback-form">
+            <label>Ваш вопрос:<textarea name="message" required></textarea></label>
+            <button type="submit">Отправить</button>
+        </form>
+        <div class="messengers">
+            <span>Онлайн-чат:</span>
+            <a href="https://t.me/vovochka_closet" target="_blank">Telegram</a>
+            <a href="https://wa.me/79991234567" target="_blank">WhatsApp</a>
+        </div>
+        <div class="address">
+            <p>Адрес магазина: г. Москва, ул. Примерная, д. 1</p>
+            <p>Время работы: Пн-Вс 10:00–20:00</p>
+        </div>
+    </div>
+    <p>&copy; 2025 Vovochka Closet. Все права защищены.</p>
+</footer>
+    <div id="toast" class="toast"></div>
+    <button id="to-top" class="to-top" title="Наверх">↑</button>
+    <script>
+        let cart = [];
+
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartSummary = document.getElementById('cart-summary');
+            if (!cartItems || !cartSummary) return; // Проверка на существование
+            cartItems.innerHTML = '';
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Корзина пуста</p>';
+                cartSummary.innerHTML = '';
+                return;
+            }
+            cart.forEach(item => {
+                cartItems.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>${item.price}₽</span>
+                        <span>×${item.count}</span>
+                        <button class="remove-item" data-id="${item.id}">Удалить</button>
+                    </div>
+                `;
+            });
+            const total = cart.reduce((sum, item) => sum + item.price * item.count, 0);
+            cartSummary.innerHTML = `<strong>Итого: ${total}₽</strong>`;
+        }
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = btn.closest('.product-card');
+                const id = card.getAttribute('data-id');
+                const name = card.getAttribute('data-name');
+                const price = parseInt(card.getAttribute('data-price'));
+                const existing = cart.find(item => item.id === id);
+                if (existing) {
+                    existing.count += 1;
+                } else {
+                    cart.push({id, name, price, count: 1});
+                }
+                renderCart();
+            });
+        });
+        document.getElementById('cart-items').addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-item')) {
+                const id = e.target.getAttribute('data-id');
+                cart = cart.filter(item => item.id !== id);
+                renderCart();
+            }
+        });
+        document.getElementById('checkout-btn').onclick = function() {
+            if (cart.length === 0) return;
+            document.getElementById('cart-section').style.display = 'none';
+            document.getElementById('checkout-section').style.display = 'block';
+        };
+        document.getElementById('back-to-cart').onclick = function() {
+            document.getElementById('checkout-section').style.display = 'none';
+            document.getElementById('cart-section').style.display = 'block';
+        };
+        document.getElementById('order-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Спасибо за заказ! Наш менеджер свяжется с вами.');
+            cart = [];
+            renderCart();
+            document.getElementById('checkout-section').style.display = 'none';
+            document.getElementById('cart-section').style.display = 'block';
+        };
+        document.getElementById('feedback-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Ваше сообщение отправлено! Мы ответим вам в ближайшее время.');
+            e.target.reset();
+        };
+        document.getElementById('review-form').onsubmit = function(e) {
+            e.preventDefault();
+            const name = e.target.name.value;
+            const rating = e.target.rating.value;
+            const text = e.target.text.value;
+            const reviewList = document.getElementById('reviews-list');
+            reviewList.innerHTML += `
+                <div class="review-card">
+                    <strong>${name}</strong>
+                    <span class="stars">${'★'.repeat(rating) + '☆'.repeat(5 - rating)}</span>
+                    <p>${text}</p>
+                </div>
+            `;
+            e.target.reset();
+        };
+        document.getElementById('shop-review-form').onsubmit = function(e) {
+            e.preventDefault();
+            const name = e.target.name.value;
+            const rating = e.target.rating.value;
+            const text = e.target.text.value;
+            const shopReviewList = document.getElementById('shop-reviews-list');
+            shopReviewList.innerHTML += `
+                <div class="review-card">
+                    <strong>${name}</strong>
+                    <span class="stars">${'★'.repeat(rating) + '☆'.repeat(5 - rating)}</span>
+                    <p>${text}</p>
+                </div>
+            `;
+            e.target.reset();
+        };
+        // Калькулятор комплекта
+        document.getElementById('calc-set').onclick = function() {
+            const tshirtElem = document.querySelector('[name="tshirt"]');
+            const shortsElem = document.querySelector('[name="shorts"]');
+            const capElem = document.querySelector('[name="cap"]');
+            const resultElem = document.getElementById('set-result');
+            if (!tshirtElem || !shortsElem || !capElem || !resultElem) return; // Проверка
+            const tshirt = parseInt(tshirtElem.value) || 0;
+            const shorts = parseInt(shortsElem.value) || 0;
+            const cap = parseInt(capElem.value) || 0;
+            let total = tshirt + shorts + cap;
+            let count = [tshirt, shorts, cap].filter(x => x > 0).length;
+            let discount = count >= 2 ? 0.15 : 0;
+            let final = Math.round(total * (1 - discount));
+            let msg = count >= 2
+                ? `Комплект: ${final}₽ (скидка 15%)`
+                : `Сумма: ${final}₽`;
+            resultElem.textContent = msg;
+        };
+
+        // Купить в 1 клик
+        document.getElementById('one-click-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Спасибо! Оператор свяжется с вами для оформления заказа.');
+            e.target.reset();
+        };
+
+        // Подписка
+        document.getElementById('subscribe-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Спасибо за подписку! Ваш промокод: FIRST10');
+            e.target.reset();
+        };
+
+        // Колесо фортуны
+        document.getElementById('spin-fortune').onclick = function() {
+            const prizes = [
+                'Скидка 5%',
+                'Скидка 10%',
+                'Скидка 15%',
+                'Подарок к заказу',
+                'Бесплатная доставка',
+                'Увы, попробуйте снова!'
+            ];
+            const result = prizes[Math.floor(Math.random() * prizes.length)];
+            document.getElementById('fortune-result').textContent = 'Ваш приз: ' + result;
+        };
+
+        // Накопительная система
+        let points = 0;
+        function updatePoints() {
+            const pointsElem = document.getElementById('loyalty-points');
+            if (!pointsElem) return; // Проверка на существование
+            pointsElem.textContent = points;
+        }
+        document.getElementById('exchange-points').onclick = function() {
+            if (points >= 100) {
+                document.getElementById('loyalty-result').textContent = 'Вы получили подарок!';
+                points -= 100;
+                updatePoints();
+            } else {
+                document.getElementById('loyalty-result').textContent = 'Недостаточно баллов для обмена.';
+            }
+        };
+        // Пример начисления баллов при покупке
+        window.addEventListener('orderSuccess', function() {
+            points += 10;
+            updatePoints();
+        });
+        updatePoints();
+
+        // Подарочный сертификат
+        document.getElementById('gift-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Спасибо! Сертификат будет отправлен на указанный email.');
+            e.target.reset();
+        };
+        // Уведомление о размере
+        document.getElementById('notify-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Спасибо! Мы уведомим вас, когда нужный размер появится в наличии.');
+            e.target.reset();
+        };
+
+        function startTimer(duration, display) {
+            let timer = duration, hours, minutes, seconds;
+            setInterval(function () {
+                hours = Math.floor(timer / 3600);
+                minutes = Math.floor((timer % 3600) / 60);
+                seconds = timer % 60;
+                display.textContent = 
+                    (hours < 10 ? "0" : "") + hours + ":" +
+                    (minutes < 10 ? "0" : "") + minutes + ":" +
+                    (seconds < 10 ? "0" : "") + seconds;
+                if (--timer < 0) timer = 0;
+            }, 1000);
+        }
+        window.onload = function () {
+            const duration = 2 * 3600 + 13 * 60 + 45; // 2:13:45
+            const display = document.getElementById('timer');
+            if (display) startTimer(duration, display);
+        };
+    </script>
+    <script>
+let cartChanged = false;
+window.onbeforeunload = function() {
+    if (cartChanged) {
+        // Здесь можно отправить AJAX-запрос на сервер для email/SMS
+        // Например: fetch('/api/abandoned-cart', {method:'POST', body:...})
+        alert('Вы забыли оформить заказ! Мы можем напомнить вам по email или SMS.');
+    }
+};
+document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.addEventListener('click', function() {
+        cartChanged = true;
+        // ...ваш код добавления в корзину...
+    });
+});
+</script>
+
+        <!-- Частые вопросы -->
+        <section class="faq">
+            <h2>Частые вопросы</h2>
+            <details>
+                <summary>Как выбрать размер?</summary>
+                <p>Воспользуйтесь таблицей размеров в карточке товара или спросите онлайн-консультанта.</p>
+            </details>
+            <details>
+                <summary>Как оформить возврат?</summary>
+                <p>Вы можете вернуть товар в течение 14 дней. Подробнее — в разделе "Возврат".</p>
+            </details>
+            <details>
+                <summary>Какие способы оплаты доступны?</summary>
+                <p>Банковская карта, наличные, онлайн-оплата.</p>
+            </details>
+        </section>
+    <!-- Поиск по FAQ и FAQ (только один раз!) -->
+    <input type="search" id="faq-search" placeholder="Поиск по вопросам..." style="margin:20px 0;display:block;width:100%;max-width:400px;">
+    <section class="faq">
+        <h2>Частые вопросы</h2>
+        <details>
+            <summary>Как выбрать размер?</summary>
+            <p>Воспользуйтесь таблицей размеров в карточке товара или спросите онлайн-консультанта.</p>
+        </details>
+        <details>
+            <summary>Как оформить возврат?</summary>
+            <p>Вы можете вернуть товар в течение 14 дней. Подробнее — в разделе "Возврат".</p>
+        </details>
+        <details>
+            <summary>Какие способы оплаты доступны?</summary>
+            <p>Банковская карта, наличные, онлайн-оплата.</p>
+        </details>
+    </section>
+
+    <!-- Скрипты -->
+    <script>
+    // Поиск по FAQ (только один раз)
+    document.getElementById('faq-search').oninput = function() {
+        const val = this.value.toLowerCase();
+        document.querySelectorAll('.faq details').forEach(d => {
+            d.style.display = d.textContent.toLowerCase().includes(val) ? '' : 'none';
+        });
+    };
+
+    // Корзина (только один обработчик и одна переменная cart)
+    // let cart = []; // Удалено, чтобы избежать повторного объявления
+    function renderCart() {
+        const cartItems = document.getElementById('cart-items');
+        const cartSummary = document.getElementById('cart-summary');
+        if (!cartItems || !cartSummary) return;
+        cartItems.innerHTML = '';
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p>Корзина пуста</p>';
+            cartSummary.innerHTML = '';
+            return;
+        }
+        cart.forEach(item => {
+            cartItems.innerHTML += `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>${item.price}₽</span>
+                    <span>×${item.count}</span>
+                    <button class="remove-item" data-id="${item.id}">Удалить</button>
+                </div>
+            `;
+        });
+        const total = cart.reduce((sum, item) => sum + item.price * item.count, 0);
+        cartSummary.innerHTML = `<strong>Итого: ${total}₽</strong>`;
+    }
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = btn.closest('.product-card');
+            const id = card.getAttribute('data-id');
+            const name = card.getAttribute('data-name');
+            const price = parseInt(card.getAttribute('data-price'));
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.count += 1;
+            } else {
+                cart.push({id, name, price, count: 1});
+            }
+            renderCart();
+        });
+    });
+    document.getElementById('cart-items').addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-item')) {
+            const id = e.target.getAttribute('data-id');
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+        }
+    });
+    </script>
+
+    <!-- Форма для добавления товара -->
+<section class="admin-products" id="admin-panel-products" style="display:none;">
+    <h2>Добавить новый товар</h2>
+    <form id="product-form">
+        <label>Название:<input type="text" name="name" required></label>
+        <label>Цена:<input type="number" name="price" required></label>
+        <label>Размеры:<input type="text" name="sizes" placeholder="например: 92-140" required></label>
+        <label>Цвет:<input type="text" name="color" required></label>
+        <label>Описание:<textarea name="desc" required></textarea></label>
+        <label>Фото:<input type="file" name="img" accept="image/*" required></label>
+        <button type="submit">Добавить товар</button>
+    </form>
+</section>
+<script>
+const productForm = document.getElementById('product-form');
+productForm.onsubmit = async function(e) {
+    e.preventDefault();
+    const data = new FormData(productForm);
+    const res = await fetch('http://localhost:3000/api/products', {
+        method: 'POST',
+        body: data,
+        headers: {
+            'Authorization': 'Bearer supersecret'
+        }
+    });
+    if (res.ok) alert('Товар добавлен!');
+    else alert('Ошибка: только для администратора');
+};
+</script>
+<!-- Форма для добавления акции -->
+<section class="admin-promo" id="admin-panel-promos" style="display:none;">
+    <h2>Добавить новую акцию</h2>
+    <form id="promo-form">
+        <label>Заголовок:<input type="text" name="title" required></label>
+        <label>Описание:<textarea name="desc" required></textarea></label>
+        <label>Фото:<input type="file" name="img" accept="image/*" required></label>
+        <button type="submit">Добавить акцию</button>
+    </form>
+</section>
+<script>
+const promoList = document.getElementById('promo-list');
+const promoForm = document.getElementById('promo-form');
+
+if (promoForm && promoList) {
+    promoForm.onsubmit = function(e) {
+        e.preventDefault();
+        const title = this.title.value;
+        const desc = this.desc.value;
+        const imgFile = this.img.files[0];
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const card = document.createElement('div');
+            card.className = 'promo-card';
+            card.innerHTML = `
+                <img src="${ev.target.result}" alt="${title}">
+                <h3>${title}</h3>
+                <p>${desc}</p>
+            `;
+            promoList.appendChild(card);
+            promoForm.reset();
+        };
+        if (imgFile) reader.readAsDataURL(imgFile);
+    };
+}
+</script>
+<!-- Форма для добавления раздела -->
+<section class="admin-section" id="admin-panel-sections" style="display:none;">
+    <h2>Добавить новый раздел</h2>
+    <form id="section-form">
+        <label>Название раздела:<input type="text" name="section" required></label>
+        <label>Описание:<textarea name="desc" required></textarea></label>
+        <button type="submit">Добавить раздел</button>
+    </form>
+</section>
+<div id="custom-sections"></div>
+<script>
+const sectionForm = document.getElementById('section-form');
+const customSections = document.getElementById('custom-sections');
+
+if (sectionForm && customSections) {
+    sectionForm.onsubmit = function(e) {
+        e.preventDefault();
+        const section = this.section.value;
+        const desc = this.desc.value;
+        const block = document.createElement('section');
+        block.className = 'custom-section';
+        block.innerHTML = `<h2>${section}</h2><p>${desc}</p>`;
+        customSections.appendChild(block);
+        sectionForm.reset();
+    };
+}
+</script>
+<!-- Форма входа для администратора -->
+<div id="admin-login">
+    <h3>Вход для администратора</h3>
+    <input type="password" id="admin-pass" placeholder="Пароль">
+    <button id="admin-login-btn">Войти</button>
+    <p id="admin-login-error" style="color:red;display:none;">Неверный пароль!</p>
+</div>
+<script>
+const ADMIN_PASSWORD = 'supersecret'; // тот же пароль, что на сервере
+
+document.getElementById('admin-login-btn').onclick = function() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById('admin-login').style.display = 'none';
+        document.getElementById('admin-panel-products').style.display = '';
+        document.getElementById('admin-panel-promos').style.display = '';
+        document.getElementById('admin-panel-sections').style.display = '';
+        localStorage.setItem('admin', '1');
+    } else {
+        document.getElementById('admin-login-error').style.display = '';
+    }
+};
+if (localStorage.getItem('admin') === '1') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel-products').style.display = '';
+    document.getElementById('admin-panel-promos').style.display = '';
+    document.getElementById('admin-panel-sections').style.display = '';
+}
+</script>
+<!-- Форма для добавления промокодов -->
+<section class="admin-promocodes" id="admin-panel-promocodes" style="display:none;">
+    <h2>Промокоды</h2>
+    <form id="promocode-form">
+        <label>Промокод:<input type="text" name="code" required></label>
+        <label>Скидка (%):<input type="number" name="discount" required></label>
+        <button type="submit">Добавить промокод</button>
+    </form>
+    <ul id="promocode-list"></ul>
+</section>
+<script>
+const promocodeForm = document.getElementById('promocode-form');
+const promocodeList = document.getElementById('promocode-list');
+
+async function loadPromocodes() {
+    const res = await fetch('http://localhost:3000/api/promocodes');
+    const codes = await res.json();
+    promocodeList.innerHTML = '';
+    codes.forEach(c => {
+        const li = document.createElement('li');
+        li.textContent = `${c.code} — ${c.discount}% `;
+        const del = document.createElement('button');
+        del.textContent = 'Удалить';
+        del.onclick = async () => {
+            await fetch(`http://localhost:3000/api/promocodes/${c.id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer supersecret' }
+            });
+            loadPromocodes();
+        };
+        li.appendChild(del);
+        promocodeList.appendChild(li);
+    });
+}
+if (promocodeForm) {
+    promocodeForm.onsubmit = async function(e) {
+        e.preventDefault();
+        const data = {
+            code: this.code.value,
+            discount: this.discount.value
+        };
+        await fetch('http://localhost:3000/api/promocodes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer supersecret'
+            },
+            body: JSON.stringify(data)
+        });
+        this.reset();
+        loadPromocodes();
+    };
+    loadPromocodes();
+}
+</script>
+<script>
+document.querySelectorAll('.delete-product').forEach(btn => {
+    btn.onclick = async function() {
+        const id = btn.closest('.product-card').dataset.id;
+        await fetch(`http://localhost:3000/api/products/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer supersecret' }
+        });
+        // Перерисовать список товаров
+    };
+});
+// Аналогично для .edit-product — показывайте форму, отправляйте PUT-запрос
+</script>
+<!-- Форма редактирования товара (скрыта по умолчанию) -->
+<div id="edit-product-modal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1000;">
+  <form id="edit-product-form" style="background:#fff; margin:50px auto; padding:20px; max-width:400px; position:relative;">
+    <h3>Редактировать товар</h3>
+    <input type="hidden" name="id" id="edit-product-id">
+    <label>Название:<input type="text" name="name" id="edit-product-name" required></label>
+    <label>Цена:<input type="number" name="price" id="edit-product-price" required></label>
+    <label>Размеры:<input type="text" name="sizes" id="edit-product-sizes" required></label>
+    <label>Цвет:<input type="text" name="color" id="edit-product-color" required></label>
+    <label>Описание:<textarea name="desc" id="edit-product-desc" required></textarea></label>
+    <button type="submit">Сохранить</button>
+    <button type="button" id="edit-product-cancel">Отмена</button>
+  </form>
+</div>
+<script>
+document.querySelectorAll('.edit-product').forEach(btn => {
+    btn.onclick = function() {
+        const card = btn.closest('.product-card');
+        const id = card.getAttribute('data-id');
+        const name = card.getAttribute('data-name');
+        const price = card.getAttribute('data-price');
+        const sizes = card.getAttribute('data-sizes');
+        const color = card.getAttribute('data-color');
+        const desc = card.getAttribute('data-desc');
+        document.getElementById('edit-product-id').value = id;
+        document.getElementById('edit-product-name').value = name;
+        document.getElementById('edit-product-price').value = price;
+        document.getElementById('edit-product-sizes').value = sizes;
+        document.getElementById('edit-product-color').value = color;
+        document.getElementById('edit-product-desc').value = desc;
+        document.getElementById('edit-product-modal').style.display = 'block';
+    }
+});
+document.getElementById('edit-product-cancel').onclick = function() {
+    document.getElementById('edit-product-modal').style.display = 'none';
+};
+document.getElementById('edit-product-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const id = this.id.value;
+    const data = new FormData(this);
+    await fetch(`http://localhost:3000/api/products/${id}`, {
+        method: 'PUT',
+        body: data,
+        headers: {
+            'Authorization': 'Bearer supersecret'
+        }
+    });
+    document.getElementById('edit-product-modal').style.display = 'none';
+    // Обновить карточку товара на странице
+};
+</script>
+</body>
+</html>
